@@ -1,0 +1,20 @@
+\chapter{Methods}
+\label{Chap:Methods}
+
+\section{Introduction to Methods}
+This chapter includes a description of the methods employed in this project. We will cover everything from standardising the datasets for easy comparison through to \todo{finish this once the section is done}
+
+\section{Regridding Data}
+Because we use a variety of datasets which come in a variety of structures, it is important that standardise the spatial dimensions of each data source. One way we do this is by interpolating each dataset to have a consistent spatial arrangement. This allows for better quality results and makes it easier to calculate measures such as the correlation between 2m temperature and sea ice concentration.
+
+We do the interpolation using the python package Scipy, which makes use of a piecewise cubic, continuously differentiable (C1), and approximately curvature-minimizing polynomial surface to determine the value of our given variable at a chosen location. \todo{cite this or something?}
+
+We converted the temperature data to the projection the sea ice data is provided in; a south polar stereographic projection with regular grid cells of 25km$\times$25km. We found this resolution to have a good balance between reasonable runtimes and good quality results.
+
+
+\section{Pearson Correlation Coefficient}
+\label{Methods:pearson}
+\todo{Do we need a citation for this?}
+One comparison which we used for identifying connections between two different time series or different time series components is the Pearson correlation component. Taking a time series $x$, and a time series $y$, with elements $x_i$ and $y_i$, and means denoted by $\bar{x}$ and $\bar{y}$; we can calculate the Pearson correlation coefficient $r_{xy}$.
+
+\input{equations/pearsoncorrelation.tex}

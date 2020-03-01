@@ -1,0 +1,66 @@
+\documentclass[a4paper,twoside,12pt]{book}
+
+\usepackage{calc}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{todonotes}
+
+%%%%%%% Clickable links %%%%%%%
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=black,
+	filecolor=black,
+	linkcolor=black,
+	urlcolor=black
+}
+
+%%%%%%% Word Counting %%%%%%%
+\newcommand{\detailtexcount}[1]{%
+  \immediate\write18{texcount -merge -sum -q #1.tex output.bbl > #1.wcdetail }%
+  \verbatiminput{#1.wcdetail}%
+}
+\newcommand{\quickwordcount}[1]{%
+  \immediate\write18{texcount -1 -sum -merge -q #1.tex output.bbl > #1-words.sum }%
+  \input{#1-words.sum} words%
+}
+\newcommand{\quickcharcount}[1]{%
+  \immediate\write18{texcount -1 -sum -merge -char -q #1.tex output.bbl > #1-chars.sum }%
+  \input{#1-chars.sum} characters (not including spaces)%
+}
+
+
+%%%%%%% Page styles %%%%%%%
+\setlength{\hoffset}{-1in} \setlength{\oddsidemargin}{40mm} \setlength{\evensidemargin}{30mm}
+\setlength{\textwidth}{\paperwidth-\oddsidemargin-\evensidemargin} \onehalfspacing
+
+%%%%%%% Document starts here
+\begin{document}
+
+%%%%%%% Title Page %%%%%%%
+\frontmatter
+\begin{titlepage} \null\vfill \centering
+  {\Huge \bf \input{title}} \\ \vspace{20mm} {\Large Hamish Jelleyman} \\ \vspace{20mm} \includegraphics{Images/UoA_Crest.eps} \\ \vspace{20mm} A thesis submitted in fulfilment of the requirements \\ for the degree of Master of Science in Physics \\ \vspace{20mm} The University of Auckland \\ 2020
+\vfill\null \end{titlepage}
+
+\input{Chapters/Abstract.tex}
+\input{Chapters/Acknowledgements.tex}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+%%%%%%% Main text %%%%%%%
+\mainmatter
+\input{Chapters/Introduction.tex}
+\input{Chapters/Methods.tex}
+\input{Chapters/Results.tex}
+
+%%%%%%% Bibliography %%%%%%%
+\bibliographystyle{Unsrtrjk}
+\bibliography{references}
+\input{Chapters/word_counter.tex}
+
+\end{document} 
