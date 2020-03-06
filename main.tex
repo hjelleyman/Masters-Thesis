@@ -1,11 +1,14 @@
 \documentclass[a4paper,twoside,12pt]{book}
+\raggedbottom
 
+\usepackage{layout}
 \usepackage{calc}
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{todonotes}
+% \setlength{\parindent}{0cm}
 
 %%%%%%% Clickable links %%%%%%%
 \usepackage{hyperref}
@@ -16,6 +19,13 @@
 	linkcolor=black,
 	urlcolor=black
 }
+
+%%%%%% Tables %%%%%%%%
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{float}
 
 %%%%%%% Word Counting %%%%%%%
 \newcommand{\detailtexcount}[1]{%
@@ -35,6 +45,7 @@
 %%%%%%% Page styles %%%%%%%
 \setlength{\hoffset}{-1in} \setlength{\oddsidemargin}{40mm} \setlength{\evensidemargin}{30mm}
 \setlength{\textwidth}{\paperwidth-\oddsidemargin-\evensidemargin} \onehalfspacing
+% \setlength{\parskip}{1cm plus 4mm minus 3mm}
 
 %%%%%%% Document starts here
 \begin{document}
@@ -59,8 +70,9 @@
 \input{Chapters/Results.tex}
 
 %%%%%%% Bibliography %%%%%%%
-\bibliographystyle{Unsrtrjk}
+\bibliographystyle{unsrt}
 \bibliography{references}
+
 \input{Chapters/word_counter.tex}
 
 \end{document} 
