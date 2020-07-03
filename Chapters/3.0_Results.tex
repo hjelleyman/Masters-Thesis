@@ -1,0 +1,41 @@
+\part{Results and Discussion}
+\label{Chap:Results}
+
+\chapter{Introduction to Results and Discussion}
+In this chapter we will present our results for this project and discuss their significance and shortcomings in the context of what we have learned through both our research and our review of the relevant literature. We will begin by looking at the correlations between different variables such as the total sea ice in Antarctica and temperature at gridpoints around the globe. Our hope here is that we similarities in the patterns of correlations which we can associate with different atmospheric or oceanic circulations such as the IPO, ENSO, or the PDO. We then will attempt to quantify the impact on these signals on the amount of sea ice in Antarctica.
+
+\chapter{Correlations}
+As our first step in exploring the relationship between sea ice in Antarctica and oceanic and atmospheric weather patterns, we look at correlations between the concentrations of ice in Antarctica both locally and globally over a variety of time scales. 
+
+By looking at the direct correlation at each gridpoint in our dataset between sea ice and different variables we can build up an understanding of what is directly important to the way the ice melts and refreezes each year.
+
+By expanding the scope of this search and looking at the correlation between the amount of ice in Antarctica and global measurements or reanalysis of different variables, we hope to identify what known and unknown circulations impact the behaviour of ice in Antarctica on a global scale.
+
+One thing we noted as we looked through literature on this topic was a tendency of papers to focus in on specific events and follow a chain of causation locally in a short time frame. We hope to investigate the regularity of these events by looking at weather patterns which have been highlighted to see if the phases we see are consistent with particular patterns of ice over a larger number of events throughout our dataset. The correlations we are calculating are our first step in this direction.
+\newpage
+\input{Chapters/Results/correlations/Local_Correlations}
+\newpage
+\input{Chapters/Results/correlations/Correlations}
+\newpage
+\input{Chapters/Results/correlations/Anomalous_Correlations}
+\newpage
+\input{Chapters/Results/correlations/SimpleCorrelations}
+\newpage
+\input{Chapters/Results/correlations/SplittingTheData}
+\newpage
+
+
+\chapter{Regressions}
+
+Following on from the correlation results shown before it is apparent that there are potential relationships between the different atmospheric circulations and the behaviour in trends and variability of sea ice extent in Antarctica. The next step is to begin to quantify the extent of this relationship by performing a regression analysis. The mechanics of how these figures are produced are described in detail in the method section \textcolor{red}{cross-reference this}. 
+
+For this section we will start by looking at the mean SIE across the entire continent and fit it to a simple linear model which predicts a value of SIE from the values of the different circulations we are looking at. To begin with this is SAM, DMI and IPO, however as our analysis expands, we plan to look at other influential circulations such as ENSO.
+
+Following this we will perform the same analysis on each gridpoint of sea-ice and look at the spatial distribution of this regression. Using it to quantify and investigate the extent to which we can account for variability in SIE to these different indices.
+
+What we are expecting to see is that SAM will have the largest impact on long term trends and DMI and IPO will be more important for describing short term variability.
+
+\newpage
+\input{Chapters/Results/regressions/meananalysis}
+\newpage
+\input{Chapters/Results/regressions/SpatialRegressions}

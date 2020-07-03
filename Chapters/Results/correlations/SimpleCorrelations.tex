@@ -1,0 +1,63 @@
+\section{Annually averaged results}
+For the annually averaged time series, no time-shift was included and there is no difference between the raw and anomalous datasets so we only have two plots, one with the trend and one without.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Images_3.0/correlations/subplots_indicies_annually_0_anomalous.pdf}
+    \caption[Correlations between SIE in Antarctica and indices, averaged annually with no time lag.]{Correlations between SIE in Antarctica and indices, averaged annually with no time lag. The first 4 plots are time series of total SIE and the different indices so we can visually gain an understanding regarding the correlations. The bottom plot is a bar plot showing the correlations between SIE and the different indices. Blue bars have a p-value less than 0.05 and are considered statistically significant. Red bars have a p-value larger than 0.05 and are considered statistically insignificant.}
+    \label{fig:anual_with_trend}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Images_3.0/correlations/subplots_indicies_annually_0_anomalous_detrended.pdf}
+    \caption[Correlations between SIE in Antarctica and indices, averaged annually and detrended with no time lag.]{Correlations between SIE in Antarctica and indices, averaged annually and detrended with no time lag. The first 4 plots are time series of total SIE and the different indices so we can visually gain an understanding regarding the correlations. The bottom plot is a bar plot showing the correlations between SIE and the different indices. Blue bars have a p-value less than 0.05 and are considered statistically significant. Red bars have a p-value larger than 0.05 and are considered statistically insignificant.}
+    \label{fig:annual_without_trend}
+\end{figure}
+Not much can be said from the above figures as all the correlations are insignificant. This could be for a number of reasons, not least because we are only looking at 40 data-points for each time series or that we are considering the behaviour of ice over a large spatial area. Though still statistically insignificant, the correlations are larger for the case where the trend is included.
+
+
+\section{Monthly averages}
+
+In order to hopefully gain better results, we looked at this with a higher temporal resolution (monthly rather than annually averaged). This has the advantage of picking up higher frequency behaviours, but also is more noisy as a result. Additionally with the higher resolution it makes sense to explore lead-lag relationships between the different variables, this is something we do later in this thesis.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{Images_3.0/correlations/subplots_indicies_monthly_0_anomalous.pdf}
+    \caption[Correlations between SIE in Antarctica and indices, averaged monthly with no time lag.]{Correlations between SIE in Antarctica and indices, averaged monthly with no time lag. The first 4 plots are time series of total SIE and the different indices so we can visually gain an understanding regarding the correlations. The bottom plot is a bar plot showing the correlations between SIE and the different indices. Blue bars have a p-value less than 0.05 and are considered statistically significant. Red bars have a p-value larger than 0.05 and are considered statistically insignificant.}
+    \label{fig:seasonal_with_trend}
+\end{figure}
+Immediately, this figure tells us that SAM and IPO both have significant correlations with SIE in Antarctica on a monthly basis. For SAM this is unsurprising as the pattern is defined as changes in wind speeds and pressures at the high southern latitudes close to Antarctica \textcolor{red}{(get proper definition and cite}. For IPO this is also makes some sense as it is a major climate signal over the Pacific. \textcolor{red}{Do other people get the same result?} To help build our understanding of these relationships, let's look at what happens when we detrend the time series.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{Images_3.0/correlations/subplots_indicies_monthly_0_anomalous_detrended.pdf}
+    \caption[Correlations between SIE in Antarctica and indices, averaged monthly, detrended with no time lag.]{Correlations between SIE in Antarctica and indices, averaged monthly, detrended with no time lag. The first 4 plots are time series of total SIE and the different indices so we can visually gain an understanding regarding the correlations. The bottom plot is a bar plot showing the correlations between SIE and the different indices. Blue bars have a p-value less than 0.05 and are considered statistically significant. Red bars have a p-value larger than 0.05 and are considered statistically insignificant.}
+    \label{fig:seasonal_without_trend}
+\end{figure}
+
+When we remove the trend the magnitude of the correlations decrease for SAM and IPO, whereas DMI has no change in the magnitude of correlation. The correlation between SAM and SIE in Antarctica remains statistically significant whereas the IPO is no longer significant. 
+
+
+\section{Lead lag analysis for monthly data}
+
+We can perform some lead-lag analysis on the correlations between the different indices and SIE in Antarctica, to gain some understanding on if there are any delayed signals of significance we need to consider. Because the indices are initially anomalous signals, we only did this for the anomalous sea ice data. In the following plots, a negative time-lag indicates that we are comparing the time-series for sea ice with patterns in each index before that point. A positive time-lag indicates that we are comparing the time-series for sea ice with patterns in each index after that point. The size of the time-lag indicates the length to which the sea ice time series was shifted.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{Images_3.0/correlations/indicies_monthly_anomalous.pdf}
+    \caption[Histograms of correlations with different indices at different time-lags with anomalous Antarctic SIE.]{Histograms of correlations with different indices at different time-lags with anomalous Antarctic SIE. A blue bar indicates a statistically significant p-value of less than 0.05. A red bar indicates a statistically insignificant value.}
+    \label{fig:leadlag_anomalous}
+\end{figure}
+
+DMI has no significant correlation with Antarctic SIE regardless of time-lag. SAM has a significant correlation for time-lags of -1, 0, 1, 3, 4, and 5 months. IPO has significant correlations for any time-lag less than 3 months (including negative time-lags). It's possible that the trend is confusing the signals here so let's see what happens when we remove it.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = \linewidth]{Images_3.0/correlations/indicies_monthly_anomalous_detrended.pdf}
+    \caption[Histograms of correlations with different indices at different time-lags with anomalous and detrended Antarctic SIE.]{Histograms of correlations with different indices at different time-lags with anomalous and detrended Antarctic SIE. A blue bar indicates a statistically significant p-value of less than 0.05. A red bar indicates a statistically insignificant value.}
+    \label{fig:leadlag_anomalous_detrended}
+\end{figure}
+
+The only significant correlations we observe at this point are the correlations between SAM and Antarctic SIE for time-lags of 0 and 4 months. This indicates that when an event occurs for Antarctic SIE, it is likely that we would observe a related event in the SAM index at the same time and also 4 months later. \textcolor{red}{not sure if I worded this right so let's go with it for now.}\medskip
+
+One problem we have here is that we are not totally able to use the information for the correlations which we have above to inform us regarding how events for the different indexed circulations could potentially impact the behaviour of sea ice we see in Antarctica. For that we want to look at the first time derivative of Antarctic SIE to see if it has behaviours related to these indices.

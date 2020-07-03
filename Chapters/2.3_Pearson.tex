@@ -1,0 +1,26 @@
+\section{Correlation analysis}
+\label{Methods:pearson}
+
+In this following section, we will set out the methods used and some of the motivations behind them for calculating and analysing the correlations between different variables and SIE and SIC in Antarctica.
+
+\subsection{Pearson correlation coefficient}
+One comparison which we used for identifying connections between two different time series or different time series components is the Pearson correlation component. Taking a time series $x$, and a time series $y$, with elements $x_i$ and $y_i$, and means denoted by $\bar{x}$ and $\bar{y}$; we can calculate the Pearson correlation coefficient $r_{xy}$.
+
+\input{equations/pearsoncorrelation.tex}
+
+The magnitude of the coefficient indicates how well correlated the data is and the sign represents the nature of the relationship. A large positive coefficient is indicative of a strong directly proportional correlation between the two variables, whereas a small negative coefficient indicates a weak correlation where the variables are approximately correlated to each other.
+
+One thing to be careful of when interpreting these results is that the correlation is indicative of a relationship between two variables, it does not imply that a relationship directly exists. To determine that further analysis is required. Additionally, as will be explained in a little more detail below, a high correlation does not necessarily indicate a significant correlation between two variables, yet again, more analysis is required for that.
+
+\subsection{P-values and significance of correlation}
+In order to identify the significance of the calculated correlations, it is not sufficient to simply use the strength of correlation. Instead we used a p-value from a two tailed test with a threshold value of 0.05, giving us a confidence level of 95\%.
+
+The p-value approximately represents the probability of an uncorrelated system producing the correlation which has been calculated. For a more detailed description of how the p-value is calculated see the documentation for scipy. \textcolor{red}{cite this, also do I need to describe it more?}
+
+
+\subsection{Comparing time series by eye}
+As a test beyond simply calculating the correlations and looking at their spatial distributions, for each set of calculations we plotted example time series against each other to give an visual indication on the validity of the calculated correlations.
+
+
+\subsection{\textcolor{red}{[WIP]} Time-lagged correlations}
+When plotting the different time series, specifically the time series of temperature and ice extent in Antarctica \textcolor{red}{link this to the results section}, it was noticed that there was a time lag between the different time series, which caused a decrease in the correlation between these clearly related variables. Other researchers \textcolor{red}{cite this}, solved this by introducing a time lag of one month before computing their correlations. We wanted to take this further by investigating at what time lag, maximal correlations are found spatially, regionally, and overal for each variable.

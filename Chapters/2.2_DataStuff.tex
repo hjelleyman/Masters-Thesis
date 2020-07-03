@@ -1,0 +1,77 @@
+\section{Data Wrangling}
+
+This section describes the variety of methods and techniques used in this project which falls under the data wrangling catagory. This involves Standardising the data from the variety of sources we used, regridding different datasets so they have the same spatial and temporal coordinates. Temporally decomposing the data and smoothing it. We will explore here how each of these things are done and some of the motivation behind doing them.
+
+\subsection{Data Standardisation}
+Our data came from a variety of sources. We will now briefly describe the format each dataset is in when downloaded from their respective sources, and how we standardised them so we could analyse with relative ease.
+
+\subsubsection*{NSIDC - Sea Ice Data}
+The sea ice data we used comes in .grib format files with a separate file for each month. The data exists as a brightness value representing sea ice concentration with a value between 0 and 250 for each location on a polar stereographic projection centred on the south pole. The grid-size of the raw data was 25 km x 25 km. Iterating over the files to combine we saved the data to an xarray DataFrame \textcolor{red}{reference this} and saved as a netCDF4 .nc file. Values below 15\% were discarded in this process, as were any values tagged as something other than sea ice concentrations. 
+
+\subsubsection*{ECMWF ERA5 - Atmospheric variables}
+This data was provided in the file format we used for our analysis. As such, all that we needed to do for preparing this data involved was to concatenate it along the time axis so the time dimension matched the dates we had measurements for sea ice concentration and extent.
+
+\subsubsection*{Argo float data - Oceanic variables}
+The Argo float data was initially collected by Argo floats moving around the ocean \textcolor{red}{cite this} this means that in its raw form it exists of an unstructured set of data with inconsitent spatial and temporal datapoints. Other reaserchers \textcolor{red}{cite this} have however preprocessed this and produced gridded products based on this raw data. We chose to use  \textcolor{red}{look up the name of the data}. This data comes in a regular grid in .nc files, and such we did not need to change anything with the data. \textcolor{red}{update this if it has changed by the end of the project}.
+
+\subsubsection*{Lowering resolution of data}
+For our datasets we want to lower the resolution for a number of reasons. Firstly this decreases the size of the dataset and speeds up computation. Secondly, at lower r\\esolutions it is easier to observe slow acting trends. This is a consequence of high frequency fluctuations and noise occurring at smaller scales than our lower resolutions allow.
+
+For the different datasets the base spatial grids have different sizes, this is described in the \hyperref[chap:data]{data section} of this report. We reduced the spatial resolutions by factors of 1, 5, 10, and 20 for our analysis. Results will be presented in the highest resolution unless stated otherwise.
+
+Temporally we are used both monthly and seasonal resolutions.
+
+
+\subsection{Regridding Data}
+Because we use a variety of datasets which come in a variety of structures, it is important that standardise the spatial dimensions of each data source. One way we do this is by interpolating each dataset to have a consistent spatial arrangement. This allows for better quality results and makes it easier to calculate measures such as the correlation between 2m temperature and sea ice concentration.
+
+We do the interpolation using the python package Scipy, which makes use of a piecewise cubic, continuously differentiable (C1), and approximately curvature-minimising polynomial surface to determine the value of our given variable at a chosen location. 
+
+We converted the temperature data to the projection the sea ice data is provided in; a south polar stereographic projection with regular grid cells of 25km$\times$25km. We found this resolution to have a good balance between reasonable run-times and good quality results.
+
+\subsection{\textcolor{red}{[WIP]} Smoothing Data}
+A large number of the time series we used in this project had a large amount of high frequency variability and noise. As such we looked at smoothing the data on a temporal scale to highlight lower frequency variability and the trends which occur over longer time scales. This was done using a band-pass filter. To begin with, our data had an intrinsic highest frequency of 1 month, so we looked at taking only signals with a frequency of 2 months or larger, and 3 months or larger. Looking for seasonal or longer effects.
+
+One caveat to consider in this process is that by removing the high frequency signals in the data, we are losing information and the ability to temporally resolve processes which occur on this more high frequency temporal scale. As such we will do our analysis for both the filtered (smoothed) and raw data for both anomalous data and data with the seasons included.
+
+
+
+\subsection{Summary of input data}
+\textcolor{red}{not sure where this section belongs but we should include it.}
+At the end of the processes above being applied on our input data we have a number of different datasets to analyse which all should help us build up a picture of the relationship between sea ice in Antarctica and other related variables and processes. We will now comprehensively list the different input datasets we now have for our
+analysis which will follow.
+
+\subsubsection*{Spatial datasets}
+We have 8 variables with spatial dimensions.
+\begin{itemize}
+    \item 2 metre temperature.
+    \item Surface pressure.
+    \item Total wind speed at 10m.
+    \item u (meridional) wind speed at 10m.
+    \item v (zonal) wind speed at 10m.
+    \item Sea surface temperature.
+    \item Sea ice concentration.
+    \item Sea pressure. \textcolor{red}{not sure about this.}
+\end{itemize}
+
+For the spatial datasets we have them in their raw form and also regridded to the coordinates of the SIC dataset; a South polar stereographic projection with 25km x 25km grid cells.
+We also have 4 different spatial resolutions we used.
+All of this combined gives us about 60 (15 if we only take one resolution) different input files with unique spatial variables, projections and resolutions.
+
+\subsubsection*{Datasets without spatial coordinates}
+We have 4 variables without spatial dimensions.
+\begin{itemize}
+    \item Sea ice extent.
+    \item DMI index.
+    \item SAM index.
+    \item IPO index.
+\end{itemize}
+
+\subsubsection*{Temporal changes}
+These are applied to every dataset we used.
+\begin{itemize}
+    \item Raw data.
+    \item Anomalous data.
+\end{itemize}
+
+On the temporal dimension we modified the data in 2 ways, looking for anomalies and frequency filtering. This gives us a total of 260 different input files (80 if we take only one resolution). This is a large number of potential inputs and as such in the process of doing this research we made a large number of output plots. Because we are focusing on certain elements we will only present a fraction of these outputs in this thesis, however should the reader wish to browse them, please refer to this website.\textcolor{red}{link to github website where all the results are presented with a brief comment.}

@@ -1,23 +1,29 @@
-\documentclass[a4paper,twoside,12pt]{book}
+%%%%%%% Document class and page layout %%%%%%%
+\documentclass[a4paper,12pt]{book}
 \raggedbottom
 
+%%%%%%% Importing packages %%%%%%%
 \usepackage{layout}
 \usepackage{calc}
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{float}
-\usepackage{todonotes}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{natbib}
 % \setlength{\parindent}{0cm}
 
 %%%%%%% Clickable links %%%%%%%
 \usepackage{hyperref}
 \hypersetup{
 	colorlinks,
-	citecolor=black,
-	filecolor=black,
-	linkcolor=black,
-	urlcolor=black
+	citecolor=blue,
+	filecolor=blue,
+	linkcolor=blue,
+	urlcolor=blue
 }
 
 %%%%%% Tables %%%%%%%%
@@ -52,9 +58,9 @@
 
 %%%%%%% Title Page %%%%%%%
 \frontmatter
-\begin{titlepage} \null\vfill \centering
-  {\Huge \bf \input{title}} \\ \vspace{20mm} {\Large Hamish Jelleyman} \\ \vspace{20mm} \includegraphics{Images/UoA_Crest.eps} \\ \vspace{20mm} A thesis submitted in fulfilment of the requirements \\ for the degree of Master of Science in Physics \\ \vspace{20mm} The University of Auckland \\ 2020
-\vfill\null \end{titlepage}
+\begin{titlepage} \vspace{20mm} \centering
+{\Huge\textbf{\input{title}}\par}  \vspace{20mm} {\Large Hamish Jelleyman} \\ \vspace{20mm} \includegraphics{Images/UoA_Crest.eps} \\ \vspace{20mm} A thesis submitted in fulfilment of the requirements \\ for the degree of Master of Science in Physics \\ \vspace{20mm} The University of Auckland \\ 2020
+\end{titlepage}
 
 \input{Chapters/Abstract.tex}
 \input{Chapters/Acknowledgements.tex}
@@ -65,14 +71,39 @@
 
 %%%%%%% Main text %%%%%%%
 \mainmatter
-\input{Chapters/Introduction.tex}
-\input{Chapters/Methods.tex}
-\input{Chapters/Results.tex}
+
+%%%%%%% Introduction %%%%%%%
+\input{Chapters/1.0_Introduction.tex}
+\input{Chapters/1.1_Introduction}
+\input{tables/listofnotation}
+\input{Chapters/1.2.0_Literature_Review}
+\input{Chapters/1.2.1_SeaIce}
+\input{Chapters/1.2.3_Oceanic}
+\input{Chapters/1.2.4_SeaIceXAtmosphere}
+\input{Chapters/1.2.5_SeaIceXOceanic}
+\input{Chapters/1.2.6_Statistics}
+\input{Chapters/1.3_Data}
+
+
+%%%%%%% Methods %%%%%%%
+\input{Chapters/2.0_Methods}
+\input{Chapters/2.1_Structure_of_analysis}
+\input{Chapters/2.2_DataStuff}
+\input{Chapters/2.3_Pearson}
+\input{Chapters/2.4_Regressions}
+\input{Chapters/2.5_temporalbreakdown}
+
+%%%%%%% Results %%%%%%%
+\input{Chapters/3.0_Results}
+
+%%TC:ignore
 
 %%%%%%% Bibliography %%%%%%%
-\bibliographystyle{unsrt}
+\bibliographystyle{agsm}
 \bibliography{references}
 
-\input{Chapters/word_counter.tex}
+\input{Chapters/Appendicies}
 
+\input{Chapters/word_counter.tex}
+%%TC:endignore
 \end{document} 
