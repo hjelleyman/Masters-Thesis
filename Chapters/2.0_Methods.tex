@@ -1,15 +1,183 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
 \part{Methods}
 \label{Chap:Methods}
 
 \chapter{Methods}
 This chapter includes a description of the methods employed in this project. We will cover everything from standardising the datasets for easy comparison through to.
 
-% \input{Chapters/Methods/Structure_of_analysis}
+\section{Structure of the methods used}
+Below we will go into more detail about how each of the procedures mentioned here work and are implemented, however first, let's take a moment to outline the processes carried out on the data for our analysis.
+\begin{enumerate}
+    \item \textbf{Data Wrangling}. First we had to manipulate the raw data for analysis. 
+    \begin{enumerate}
+        \item \textbf{Standardise the data}. The data came from a variety of sources. The idea here is that regardless of the source, we can process everything in the same manner.
+        \item \textbf{Change the resolution}. By lowering the resolution of the data we can speed up our computation. Higher resolutions return better quality results. We did this both temporally and spatially.
+        \item \textbf{Regridding}. In some of the computations, we required the data to represent set coordinates.
+        \item \textbf{Temporal decomposition}. We performed analysis for both standard time series and anomalous time series for each set of data.
+        \item \textcolor{red}{[WIP]} \textbf{Smoothing of data}. In order to make the analysis easier to analyse, we applied band-pass filters and moving averages to a variety of time series. 
+    \end{enumerate}
+    \item \textbf{Correlation analysis}. Our first analysis technique revolved around Pearson correlation coefficients between different time series. 
+    \begin{enumerate}
+        \item \textbf{Correlations}. The primary output here is the correlation between the different time series we are analysing.
+        \item \textbf{P-values}. In order to identify how significant our results are we used p-values from a Student's t-test \textcolor{red}{(confirm this)}.
+        \item \textbf{Compare time series}. As a visual check for the validity of results, we also plotted example time series of the different correlated variables used.
+        \item \textcolor{red}{[WIP]} \textbf{Time-lagged correlations}.
+    \end{enumerate}
+    \item \textcolor{red}{[WIP]} \textbf{Regressions}. In order to quantify the impact different variables have on each other we turned to a multivariate regression analysis.
+    \item \textcolor{red}{[WIP]} \textbf{Temporal breakdown}. In order to identify specific patterns in the data we broke the temporal scale up in a number of ways.
+    \begin{enumerate}
+        \item \textcolor{red}{[WIP]} \textbf{Extreme events}. By taking times when the SIE was at extreme values, we can look at patterns seen in different variables and indices and link what is observed to physical processes.
+    \end{enumerate}
+\end{enumerate}
 
-% \input{Chapters/Methods/DataStuff}
+\section{Data Wrangling}
 
-% \input{Chapters/Methods/Pearson}
+This section describes the variety of methods and techniques used in this project which falls under the data wrangling catagory. This involves Standardising the data from the variety of sources we used, regridding different datasets so they have the same spatial and temporal coordinates. Temporally decomposing the data and smoothing it. We will explore here how each of these things are done and some of the motivation behind doing them.
 
-% \input{Chapters/Methods/Regressions}
+\subsection{Data Standardisation}
+Our data came from a variety of sources. We will now briefly describe the format each dataset is in when downloaded from their respective sources, and how we standardised them so we could analyse with relative ease.
 
-% \input{Chapters/Methods/temporalbreakdown}
+\subsubsection*{NSIDC - Sea Ice Data}
+The sea ice data we used comes in .grib format files with a separate file for each month. The data exists as a brightness value representing sea ice concentration with a value between 0 and 250 for each location on a polar stereographic projection centred on the south pole. The grid-size of the raw data was 25 km x 25 km. Iterating over the files to combine we saved the data to an xarray DataFrame \textcolor{red}{reference this} and saved as a netCDF4 .nc file. Values below 15\% were discarded in this process, as were any values tagged as something other than sea ice concentrations. 
+
+\subsubsection*{ECMWF ERA5 - Atmospheric variables}
+This data was provided in the file format we used for our analysis. As such, all that we needed to do for preparing this data involved was to concatenate it along the time axis so the time dimension matched the dates we had measurements for sea ice concentration and extent.
+
+\subsubsection*{Argo float data - Oceanic variables}
+The Argo float data was initially collected by Argo floats moving around the ocean \textcolor{red}{cite this} this means that in its raw form it exists of an unstructured set of data with inconsitent spatial and temporal datapoints. Other reaserchers \textcolor{red}{cite this} have however preprocessed this and produced gridded products based on this raw data. We chose to use  \textcolor{red}{look up the name of the data}. This data comes in a regular grid in .nc files, and such we did not need to change anything with the data. \textcolor{red}{update this if it has changed by the end of the project}.
+
+\subsubsection*{Lowering resolution of data}
+For our datasets we want to lower the resolution for a number of reasons. Firstly this decreases the size of the dataset and speeds up computation. Secondly, at lower r\\esolutions it is easier to observe slow acting trends. This is a consequence of high frequency fluctuations and noise occurring at smaller scales than our lower resolutions allow.
+
+For the different datasets the base spatial grids have different sizes, this is described in the \hyperref[chap:data]{data section} of this report. We reduced the spatial resolutions by factors of 1, 5, 10, and 20 for our analysis. Results will be presented in the highest resolution unless stated otherwise.
+
+Temporally we are used both monthly and seasonal resolutions.
+
+
+\subsection{Regridding Data}
+Because we use a variety of datasets which come in a variety of structures, it is important that standardise the spatial dimensions of each data source. One way we do this is by interpolating each dataset to have a consistent spatial arrangement. This allows for better quality results and makes it easier to calculate measures such as the correlation between 2m temperature and sea ice concentration.
+
+We do the interpolation using the python package Scipy, which makes use of a piecewise cubic, continuously differentiable (C1), and approximately curvature-minimising polynomial surface to determine the value of our given variable at a chosen location. 
+
+We converted the temperature data to the projection the sea ice data is provided in; a south polar stereographic projection with regular grid cells of 25km$\times$25km. We found this resolution to have a good balance between reasonable run-times and good quality results.
+
+\subsection{\textcolor{red}{[WIP]} Smoothing Data}
+A large number of the time series we used in this project had a large amount of high frequency variability and noise. As such we looked at smoothing the data on a temporal scale to highlight lower frequency variability and the trends which occur over longer time scales. This was done using a band-pass filter. To begin with, our data had an intrinsic highest frequency of 1 month, so we looked at taking only signals with a frequency of 2 months or larger, and 3 months or larger. Looking for seasonal or longer effects.
+
+One caveat to consider in this process is that by removing the high frequency signals in the data, we are losing information and the ability to temporally resolve processes which occur on this more high frequency temporal scale. As such we will do our analysis for both the filtered (smoothed) and raw data for both anomalous data and data with the seasons included.
+
+
+
+\subsection{Summary of input data}
+\textcolor{red}{not sure where this section belongs but we should include it.}
+At the end of the processes above being applied on our input data we have a number of different datasets to analyse which all should help us build up a picture of the relationship between sea ice in Antarctica and other related variables and processes. We will now comprehensively list the different input datasets we now have for our
+analysis which will follow.
+
+\subsubsection*{Spatial datasets}
+We have 8 variables with spatial dimensions.
+\begin{itemize}
+    \item 2 metre temperature.
+    \item Surface pressure.
+    \item Total wind speed at 10m.
+    \item u (meridional) wind speed at 10m.
+    \item v (zonal) wind speed at 10m.
+    \item Sea surface temperature.
+    \item Sea ice concentration.
+    \item Sea pressure. \textcolor{red}{not sure about this.}
+\end{itemize}
+
+For the spatial datasets we have them in their raw form and also regridded to the coordinates of the SIC dataset; a South polar stereographic projection with 25km x 25km grid cells.
+We also have 4 different spatial resolutions we used.
+All of this combined gives us about 60 (15 if we only take one resolution) different input files with unique spatial variables, projections and resolutions.
+
+\subsubsection*{Datasets without spatial coordinates}
+We have 4 variables without spatial dimensions.
+\begin{itemize}
+    \item Sea ice extent.
+    \item DMI index.
+    \item SAM index.
+    \item IPO index.
+\end{itemize}
+
+\subsubsection*{Temporal changes}
+These are applied to every dataset we used.
+\begin{itemize}
+    \item Raw data.
+    \item Anomalous data.
+\end{itemize}
+
+On the temporal dimension we modified the data in 2 ways, looking for anomalies and frequency filtering. This gives us a total of 260 different input files (80 if we take only one resolution). This is a large number of potential inputs and as such in the process of doing this research we made a large number of output plots. Because we are focusing on certain elements we will only present a fraction of these outputs in this thesis, however should the reader wish to browse them, please refer to this website.\textcolor{red}{link to github website where all the results are presented with a brief comment.}
+
+
+\section{Correlation analysis}
+\label{Methods:pearson}
+
+In this following section, we will set out the methods used and some of the motivations behind them for calculating and analysing the correlations between different variables and SIE and SIC in Antarctica.
+
+\subsection{Pearson correlation coefficient}
+One comparison which we used for identifying connections between two different time series or different time series components is the Pearson correlation component. Taking a time series $x$, and a time series $y$, with elements $x_i$ and $y_i$, and means denoted by $\bar{x}$ and $\bar{y}$; we can calculate the Pearson correlation coefficient $r_{xy}$.
+
+\input{equations/pearsoncorrelation.tex}
+
+The magnitude of the coefficient indicates how well correlated the data is and the sign represents the nature of the relationship. A large positive coefficient is indicative of a strong directly proportional correlation between the two variables, whereas a small negative coefficient indicates a weak correlation where the variables are approximately correlated to each other.
+
+One thing to be careful of when interpreting these results is that the correlation is indicative of a relationship between two variables, it does not imply that a relationship directly exists. To determine that further analysis is required. Additionally, as will be explained in a little more detail below, a high correlation does not necessarily indicate a significant correlation between two variables, yet again, more analysis is required for that.
+
+\subsection{P-values and significance of correlation}
+In order to identify the significance of the calculated correlations, it is not sufficient to simply use the strength of correlation. Instead we used a p-value from a two tailed test with a threshold value of 0.05, giving us a confidence level of 95\%.
+
+The p-value approximately represents the probability of an uncorrelated system producing the correlation which has been calculated. For a more detailed description of how the p-value is calculated see the documentation for scipy. \textcolor{red}{cite this, also do I need to describe it more?}
+
+
+\subsection{Comparing time series by eye}
+As a test beyond simply calculating the correlations and looking at their spatial distributions, for each set of calculations we plotted example time series against each other to give an visual indication on the validity of the calculated correlations.
+
+
+\subsection{\textcolor{red}{[WIP]} Time-lagged correlations}
+When plotting the different time series, specifically the time series of temperature and ice extent in Antarctica \textcolor{red}{link this to the results section}, it was noticed that there was a time lag between the different time series, which caused a decrease in the correlation between these clearly related variables. Other researchers \textcolor{red}{cite this}, solved this by introducing a time lag of one month before computing their correlations. We wanted to take this further by investigating at what time lag, maximal correlations are found spatially, regionally, and overal for each variable.
+
+\section{Regression analysis}
+After computing a bunch of correlations We want to establish to what extent we can contribute the behaviour of SIE to the different circulations. We can do this with regression analysis. The first step is to compare the indices individually with SIE. So we take a linear regression of each index with Antarctic Sea ice extent with the following model.
+$$
+\overline{\text{SIE}_{i,j} = m_{i,j}}  \text{IND} + b_{i,j}
+$$
+Where i and j are index values for each gridpoint. SIE is the time series of concentration of sea-ice at that gridpoint and IND is the time series for the index in question. b is a bias term which we will generally ignore as we are more interested in the value for $m_{i,j}$, the regression coefficient of seaice concentration against the index in question. It is worth noting that the index timeseries only come as a single time series and will not include a spatial distribution which needs to be indexed.
+
+\subsection{Contribution of a single index}
+We can extend the results from the above regression analysis to estimate the contribution of each index to the change in seaice over our time period. We do this by multiplying $m_{i,j}$ by the temporal derivative we can gain an estimation for the extent to which we expect seaice to increase or decrease at the gridpoint over our time period soley on the influence of the single index time series.
+$$
+\left. \overline{\frac{d\  \text{SIE}_{i,j}}{dt}}\right|_{\text{IND}} = \frac{d}{dt} \left(m_{i,j}  \text{IND} + b_{i,j}\right) = m_{i,j}  \frac{d\ \text{IND}}{dt}
+$$
+This will give us a spatial distribution of the contribution of each index to the trends in Antarctic sea ice concentration based on a linear regression model. If we normalise this by the true trend in SIC at each gridpoint we can gain further understanding of what this means in relation to what has actually happened over the last 40 years. This also stands as a method we can use to verify the validity of our model.
+
+\section{Multiple Regression}
+
+We can extend this analysis to more complicated models. The first step in this direction is a linear regression where we consider multiple indices at the same time. This hopefully should be more comprehensive than running each linear regression separately and individually. The model we use to predict the concentration time series of sea ice at each gridpoint is as follows.
+$$
+\overline{\text{SIC}_{i,j}\left(t\right)} = a_{i,j} \text{SAM}\left(t\right) + b_{i,j} \text{ENSO}\left(t\right) + c_{i,j} \text{IPO}\left(t\right)+ d_{i,j} \text{DMI}\left(t\right) + e_{i,j}
+$$
+Where the index time series are SAM(t), ENSO(t), IPO(t), and DMI(t) respectively. a, b, c, and d are the regression coefficients at each gridpoint $i, j$. $\overline{\text{SIC}_{i,j}\left(t\right)}$ is the predicted behaviour of Antarctic Sea ice at each gridpoint over the entire time period. We have to be particular with our calculations here because while each index and SIC dataset has a time component, it is not being used as part of the regression, but is used to work out the expected amount of sea ice at a given year or season.
+
+\subsection{Contribution of a single index}
+Like when we compute a single regression we are interested in the individual contribution of each index to the change in Antarctic SIC. We compute this in a similar way using the regression coefficient which corresponds to the specific index of interest and treating it like the gradient of a single regression.
+
+$$
+\left. \overline{\frac{d\  \text{SIE}_{i,j}}{dt}}\right|_{\text{IND}} = \frac{d}{dt} \left(m_{i,j}  \text{IND} + b_{i,j}\right) = m_{i,j}  \frac{d\ \text{IND}}{dt}
+$$
+ If we normalise this by the true change in Antarctic SIC over time at each gridpoint we can gain an understanding of what proportion of what we see happening in SIC over time can be contributed to each index over time.
+ 
+\section{Verification of Regression Analysis}
+
+In order to validate the quality of our regression analysis we can use a few measures. Firstly we can use the covariance of the fitting which is output with the regression calculation. If the coefficients are more than two standard deviations from 0, we can say with 95\% confidence that there exists a meaningful relationship between the index in question and the SIC at that gridpoint. 
+
+Additionally, we can compute the correlation of the predicted SIC change at each location with the actual behaviour of SIC at each location. If this is a large correlation or has a significant p-value we can use this as an indication of the quality of the fitting.
+
+Finally, we can sum over the entire continent and generate a time-series of the expected SIE over the entire continent and compare that to what actually happened. This can be done visually as it will only be two time series. 
+
+We can estimate how good the linear regressions are by comparing the expected sea ice extent for each time point predicted by the regression with the actual extent of sea ice in Antarctica at that time. First we can compare this just visually by plotting the two timeseries together along with the different components. In this case we are particularly interested in the overall trend in sea ice and what proportion of it can be contributed to global atmospheric circulations. We can Take this a step futter and consider the extent to which the sea ice extent variability can be contributed to variability of the different atmospheric circulations which we are interested in. We do this by considering the expected sea ice extent if our linear model was entirely accurate and computing the correlation this has with the actual behaviour of sea ice. By computing a regression of this we can establish what proportion of the variability seen in the the true behaviour of sea ice in Antarctica can be contributed to the different circulations in our model.
+
+\section{Composite analysis}
+
+Another form of analysis which is often carried out to build a picture of what is influencing the relationships in these datasets is \textit{composite analysis}. What we do for this is Take all the years where there is a positive anomaly of SIE or for each index (\textcolor{red}{read up on what other people do})
+\end{document}
